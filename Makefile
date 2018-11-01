@@ -16,7 +16,7 @@ INCLUDES= \
 	-I$(3RD_PARTY)/lua-5.3.1/src \
 	-I$(3RD_PARTY)/zlib-1.2.11 \
 	-I$(3RD_PARTY)/giflib-5.1.4/lib \
-	-I$(3RD_PARTY)/SDL2-2.0.8/include \
+	-I$(3RD_PARTY)/SDL2-2.0.7/include \
 	-I$(3RD_PARTY)/sdl-gpu/include \
 	-I$(3RD_PARTY)/wren-0.1.0/src/include \
 	-I$(3RD_PARTY)/moonscript \
@@ -49,7 +49,7 @@ LINUX_LIBS= \
 	-L$(3RD_PARTY)/wren-0.1.0/lib \
 	-L$(3RD_PARTY)/sdl-gpu/build/linux \
 	-L$(3RD_PARTY)/lua-5.3.1/src \
-	-L$(3RD_PARTY)/SDL2-2.0.8/build/.libs \
+	-L$(3RD_PARTY)/SDL2-2.0.7/build/.libs \
 	-L$(3RD_PARTY)/curl/lib
 
 LINUX64_LIBS= \
@@ -374,7 +374,7 @@ chip-lto-pro:
 WREN_A=$(3RD_PARTY)/wren-0.1.0/lib/libwren.a
 SDLGPU_A=$(3RD_PARTY)/sdl-gpu/build/linux/libsdlgpu.a
 LUA_A=$(3RD_PARTY)/lua-5.3.1/src/liblua.a
-SDL2_A=$(3RD_PARTY)/SDL2-2.0.8/build/.libs/libSDL2.a
+SDL2_A=$(3RD_PARTY)/SDL2-2.0.7/build/.libs/libSDL2.a
 
 $(WREN_A):
 	make static -C $(3RD_PARTY)/wren-0.1.0/
@@ -386,7 +386,7 @@ $(LUA_A):
 	make linux -C $(3RD_PARTY)/lua-5.3.1/
 
 $(SDL2_A):
-	cd $(3RD_PARTY)/SDL2-2.0.8/ && ./configure --enable-sndio=no && make && cd ../..
+	cd $(3RD_PARTY)/SDL2-2.0.7/ && ./configure --enable-sndio=no && make && cd ../..
 
 linux: $(WREN_A) $(SDLGPU_A) $(LUA_A) $(SDL2_A)
 	$(CC) $(LINUX_INCLUDES) $(SOURCES) $(SYSTEM) $(LPEG_SRC) $(GIF_SRC) $(SOURCES_EXT) $(TIC80_SRC) $(OPT) $(INCLUDES) $(LINUX_LIBS) $(LINUX_LINKER_FLAGS) -o $(BIN_NAME)
