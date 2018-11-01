@@ -25,9 +25,26 @@
 		</div>
 	</div>
 
+	<!-- <script
+	  src="https://code.jquery.com/jquery-3.3.1.slim.js"
+	  integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
+	  crossorigin="anonymous"></script> -->
+
 	<script type="text/javascript">
-		var Module = {canvas: document.getElementById('canvas')};		
+		var Module = {canvas: document.getElementById('canvas')
+	　　　, arguments:['palette.tic']
+	　　　};
 	</script>
+
+	<script>
+		function clickZ() {
+			let evt = new KeyboardEvent('keypress', {'keyCode':90, 'which':90});
+			document.getElementById('canvas').dispatchEvent(evt);
+			console.log('keyPress');
+		}
+	</script>
+	<button onclick="clickZ()">Coucou90</button>
+	<input type="text"></input>
 
 	<script async type="text/javascript" src="tic.js"></script>
 

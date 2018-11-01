@@ -108,7 +108,7 @@ EMS_LINKER_FLAGS= \
 	-lsdlgpu
 
 MACOSX_OPT= \
-	-mmacosx-version-min=10.6 \
+	-mmacosx-version-min=10.12 \
 	-Wno-typedef-redefinition \
 	-D_THREAD_SAFE
 
