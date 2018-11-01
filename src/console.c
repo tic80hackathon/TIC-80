@@ -1478,6 +1478,10 @@ static void onConsoleSurfCommand(Console* console, const char* param)
 	commandDone(console);
 }
 
+static void onConsoleUploadCommand(Console* console, const char* param)
+{
+}
+
 static void onConsoleCodeCommand(Console* console, const char* param)
 {
 	gotoCode();
@@ -2474,6 +2478,7 @@ static const struct
 	{"version",	NULL, "show the current version",	onConsoleVersionCommand},
 	{"edit",	NULL, "open cart editor",			onConsoleCodeCommand},
 	{"surf",	NULL, "open carts browser",			onConsoleSurfCommand},
+	{"upload",	NULL, "upload the cartridge to server",	onConsoleUploadCommand},
 };
 
 static bool predictFilename(const char* name, const char* info, s32 id, void* data, bool dir)
