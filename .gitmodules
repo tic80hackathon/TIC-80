@@ -1,3 +1,4 @@
 [submodule "3rd-party"]
 	path = 3rd-party
-	url = https://github.com/tic80hackathon/3rd-party.git:use_stable_commit
+	url = https://github.com/tic80hackathon/3rd-party.git
+	branch = use_stable_commit
