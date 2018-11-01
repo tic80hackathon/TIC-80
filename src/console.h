@@ -92,6 +92,7 @@ struct Console
 	HistoryItem* historyHead;
 
 	u32 tickCounter;
+	char* uid;
 
 	struct
 	{
