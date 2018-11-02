@@ -35,6 +35,8 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
+#include <curl/curl.h>
+
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -1478,8 +1480,71 @@ static void onConsoleSurfCommand(Console* console, const char* param)
 	commandDone(console);
 }
 
+static void onConsoleUploadCommandConfirmed(Console* console, const char* param)
+{
+	if(param)
+	{
+		s32 size = 0;
+		const char* name = getCartName(param);
+
+		void* data = strcmp(name, CONFIG_TIC_PATH) == 0
+					 ? fsLoadRootFile(console->fs, name, &size)
+					 : fsLoadFile(console->fs, name, &size);
+
+		if(data)
+		{
+			loadRom(console->tic, data, size, true);
+
+			curl_global_init(CURL_GLOBAL_ALL);
+			CURL *curl = curl_easy_init();
+			if (curl)
+			{
+				curl_easy_setopt(curl, CURLOPT_URL, console->url);
+                curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+
+				printBack(console, "Start uploading to ");
+				printBack(console, console->url);
+				printLine(console);
+				CURLcode res = curl_easy_perform(curl);
+				if(res != CURLE_OK)
+				{
+					printError(console, "Upload failed:");
+					printError(console, curl_easy_strerror(res));
+				}
+				curl_easy_cleanup(curl);
+			}
+			curl_global_cleanup();
+			free(data);
+		}
+		else
+		{
+			printBack(console, "\ncart loading error");
+		}
+	}
+	else printBack(console, "\ncart name is missing");
+
+	commandDone(console);
+}
+
 static void onConsoleUploadCommand(Console* console, const char* param)
 {
+	if(studioCartChanged())
+	{
+		static const char* Rows[] =
+				{
+						"YOU HAVE",
+						"UNSAVED CHANGES",
+						"",
+						"DO YOU REALLY WANT",
+						"TO UPLOAD CART?",
+				};
+
+		confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleUploadCommandConfirmed);
+	}
+	else
+	{
+		onConsoleUploadCommandConfirmed(console, param);
+	}
 }
 
 static void onConsoleCodeCommand(Console* console, const char* param)
@@ -3144,11 +3209,15 @@ static bool storeOptionalParams(Console* console, const char* param, const char*
 {
 	bool done = false;
 
-	if(strcmp(param, "-uid") == 0)
+	if (strcmp(param, "-uid") == 0)
 	{
 		console->uid = value;
 		done = true;
-	}
+	} else if (strcmp(param, "-url") == 0)
+    {
+	    console->url = value;
+	    done = true;
+    }
 
 	return done;
 }

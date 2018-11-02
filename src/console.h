@@ -93,6 +93,7 @@ struct Console
 
 	u32 tickCounter;
 	const char* uid;
+	const char* url;
 
 	struct
 	{
