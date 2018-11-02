@@ -3140,6 +3140,19 @@ static bool checkUIScale(Console* console, const char* param, const char* value)
 	return done;
 }
 
+static bool storeOptionalParams(Console* console, const char* param, const char* value)
+{
+	bool done = false;
+
+	if(strcmp(param, "-uid") == 0)
+	{
+		console->uid = value;
+		done = true;
+	}
+
+	return done;
+}
+
 void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config, s32 argc, char **argv)
 {
 	if(!console->buffer) console->buffer = malloc(CONSOLE_BUFFER_SIZE);
@@ -3240,10 +3253,12 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 				const char* first = argv[i];
 				const char* second = argv[i + 1];
 
+
 				if(cmdInjectCode(console, first, second)
 					|| cmdInjectSprites(console, first, second)
 					|| cmdInjectMap(console, first, second)
-					|| checkUIScale(console, first, second))
+					|| checkUIScale(console, first, second)
+					|| storeOptionalParams(console, first, second))
 					argp |= mask;
 			}
 		}
