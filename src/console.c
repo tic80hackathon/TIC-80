@@ -3193,7 +3193,6 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 		.skipStart = false,
 		.goFullscreen = false,
 		.crtMonitor = false,
-		.uid = console->uid,
 	};
 
 	memset(console->buffer, 0, CONSOLE_BUFFER_SIZE);
@@ -3273,14 +3272,6 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 
 				else if(strcmp(arg, "-crt-monitor") == 0)
 					console->crtMonitor = true;
-
-				else if(strncmp(arg, "--uid=", 6) == 0) {
-					char *buf;
-					buf = argv[i];
-					buf = strtok(buf, "=");
-					buf = strtok(NULL, "=");
-					console->uid = buf;
-				}
 
 				else continue;
 
