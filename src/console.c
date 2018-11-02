@@ -35,8 +35,6 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
-#include <curl/curl.h>
-
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
@@ -1494,27 +1492,9 @@ static void onConsoleUploadCommandConfirmed(Console* console, const char* param)
 		if(data)
 		{
 			loadRom(console->tic, data, size, true);
-
-			curl_global_init(CURL_GLOBAL_ALL);
-			CURL *curl = curl_easy_init();
-			if (curl)
-			{
-				curl_easy_setopt(curl, CURLOPT_URL, console->url);
-                curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-
-				printBack(console, "Start uploading to ");
-				printBack(console, console->url);
-				printLine(console);
-				CURLcode res = curl_easy_perform(curl);
-				if(res != CURLE_OK)
-				{
-					printError(console, "Upload failed:");
-					printError(console, curl_easy_strerror(res));
-				}
-				curl_easy_cleanup(curl);
-			}
-			curl_global_cleanup();
-			free(data);
+			/**
+			 * EM_JS
+			 */
 		}
 		else
 		{

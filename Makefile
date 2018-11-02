@@ -21,8 +21,6 @@ INCLUDES= \
 	-I$(3RD_PARTY)/wren-0.1.0/src/include \
 	-I$(3RD_PARTY)/moonscript \
 	-I$(3RD_PARTY)/fennel \
-	-I$(3RD_PARTY)/curl/include \
-	-I$(3RD_PARTY)/curl/lib \
 	-I$(BLIPBUF_LIB) \
 	-I$(DUKTAPE_LIB) \
 	-I$(SDL_NET_LIB) \
@@ -50,8 +48,7 @@ LINUX_LIBS= \
 	-L$(3RD_PARTY)/wren-0.1.0/lib \
 	-L$(3RD_PARTY)/sdl-gpu/build/linux \
 	-L$(3RD_PARTY)/lua-5.3.1/src \
-	-L$(3RD_PARTY)/SDL2-2.0.7/build/.libs \
-	-L$(3RD_PARTY)/curl/lib
+	-L$(3RD_PARTY)/SDL2-2.0.7/build/.libs
 
 LINUX64_LIBS= \
 	$(GTK_LIBS) \
@@ -75,8 +72,7 @@ LINUX_LINKER_LTO_FLAGS= \
 	-lpthread \
 	-lrt \
 	-lz \
-	-lGL \
-	-lcurl
+	-lGL
 
 LINUX_LINKER_FLAGS= \
 	-llua \
@@ -88,8 +84,7 @@ LINUX_LINKER_FLAGS= \
 	-lz \
 	-lsdlgpu \
 	-lGL \
-	-l:libSDL2.a \
-	-lcurl
+	-l:libSDL2.a
 
 
 MINGW_OUTPUT=$(BIN_NAME).exe
@@ -120,7 +115,7 @@ MACOSX_OPT= \
 MACOSX_LIBS= \
 	-L$(PRE_BUILT)/macos \
 	-L/usr/local/lib \
-	-lSDL2 -lm -liconv -lobjc -llua -lwren -lz -lgif -lcurl \
+	-lSDL2 -lm -liconv -lobjc -llua -lwren -lz -lgif \
 	-lsdlgpu \
 	-Wl,-framework,CoreAudio \
 	-Wl,-framework,AudioToolbox \
@@ -162,148 +157,6 @@ SYSTEM=\
 
 SOURCES_EXT= \
 	src/html.c
-
-CURL_DIR=$(3RD_PARTY)/curl
-CURL_SRC=\
-    $(CURL_DIR)/lib/amigaos.c \
-    $(CURL_DIR)/lib/asyn-ares.c \
-    $(CURL_DIR)/lib/asyn-thread.c \
-    $(CURL_DIR)/lib/base64.c \
-    $(CURL_DIR)/lib/conncache.c \
-    $(CURL_DIR)/lib/connect.c \
-    $(CURL_DIR)/lib/content_encoding.c \
-    $(CURL_DIR)/lib/cookie.c \
-    $(CURL_DIR)/lib/curl_addrinfo.c \
-    $(CURL_DIR)/lib/curl_ctype.c \
-    $(CURL_DIR)/lib/curl_des.c \
-    $(CURL_DIR)/lib/curl_endian.c \
-    $(CURL_DIR)/lib/curl_fnmatch.c \
-    $(CURL_DIR)/lib/curl_gethostname.c \
-    $(CURL_DIR)/lib/curl_gssapi.c \
-    $(CURL_DIR)/lib/curl_memrchr.c \
-    $(CURL_DIR)/lib/curl_multibyte.c \
-    $(CURL_DIR)/lib/curl_ntlm_core.c \
-    $(CURL_DIR)/lib/curl_ntlm_wb.c \
-    $(CURL_DIR)/lib/curl_path.c \
-    $(CURL_DIR)/lib/curl_range.c \
-    $(CURL_DIR)/lib/curl_rtmp.c \
-    $(CURL_DIR)/lib/curl_sasl.c \
-    $(CURL_DIR)/lib/curl_sspi.c \
-    $(CURL_DIR)/lib/curl_threads.c \
-    $(CURL_DIR)/lib/dict.c \
-    $(CURL_DIR)/lib/doh.c \
-    $(CURL_DIR)/lib/dotdot.c \
-    $(CURL_DIR)/lib/easy.c \
-    $(CURL_DIR)/lib/escape.c \
-    $(CURL_DIR)/lib/file.c \
-    $(CURL_DIR)/lib/fileinfo.c \
-    $(CURL_DIR)/lib/formdata.c \
-    $(CURL_DIR)/lib/ftp.c \
-    $(CURL_DIR)/lib/ftplistparser.c \
-    $(CURL_DIR)/lib/getenv.c \
-    $(CURL_DIR)/lib/getinfo.c \
-    $(CURL_DIR)/lib/gopher.c \
-    $(CURL_DIR)/lib/hash.c \
-    $(CURL_DIR)/lib/hmac.c \
-    $(CURL_DIR)/lib/hostasyn.c \
-    $(CURL_DIR)/lib/hostcheck.c \
-    $(CURL_DIR)/lib/hostip.c \
-    $(CURL_DIR)/lib/hostip4.c \
-    $(CURL_DIR)/lib/hostip6.c \
-    $(CURL_DIR)/lib/hostsyn.c \
-    $(CURL_DIR)/lib/http.c \
-    $(CURL_DIR)/lib/http2.c \
-    $(CURL_DIR)/lib/http_chunks.c \
-    $(CURL_DIR)/lib/http_digest.c \
-    $(CURL_DIR)/lib/http_negotiate.c \
-    $(CURL_DIR)/lib/http_ntlm.c \
-    $(CURL_DIR)/lib/http_proxy.c \
-    $(CURL_DIR)/lib/idn_win32.c \
-    $(CURL_DIR)/lib/if2ip.c \
-    $(CURL_DIR)/lib/imap.c \
-    $(CURL_DIR)/lib/inet_ntop.c \
-    $(CURL_DIR)/lib/inet_pton.c \
-    $(CURL_DIR)/lib/krb5.c \
-    $(CURL_DIR)/lib/ldap.c \
-    $(CURL_DIR)/lib/llist.c \
-    $(CURL_DIR)/lib/md4.c \
-    $(CURL_DIR)/lib/md5.c \
-    $(CURL_DIR)/lib/memdebug.c \
-    $(CURL_DIR)/lib/mime.c \
-    $(CURL_DIR)/lib/mprintf.c \
-    $(CURL_DIR)/lib/multi.c \
-    $(CURL_DIR)/lib/netrc.c \
-    $(CURL_DIR)/lib/non-ascii.c \
-    $(CURL_DIR)/lib/nonblock.c \
-    $(CURL_DIR)/lib/nwlib.c \
-    $(CURL_DIR)/lib/nwos.c \
-    $(CURL_DIR)/lib/openldap.c \
-    $(CURL_DIR)/lib/parsedate.c \
-    $(CURL_DIR)/lib/pingpong.c \
-    $(CURL_DIR)/lib/pipeline.c \
-    $(CURL_DIR)/lib/pop3.c \
-    $(CURL_DIR)/lib/progress.c \
-    $(CURL_DIR)/lib/psl.c \
-    $(CURL_DIR)/lib/rand.c \
-    $(CURL_DIR)/lib/rtsp.c \
-    $(CURL_DIR)/lib/security.c \
-    $(CURL_DIR)/lib/select.c \
-    $(CURL_DIR)/lib/sendf.c \
-    $(CURL_DIR)/lib/setopt.c \
-    $(CURL_DIR)/lib/sha256.c \
-    $(CURL_DIR)/lib/share.c \
-    $(CURL_DIR)/lib/slist.c \
-    $(CURL_DIR)/lib/smb.c \
-    $(CURL_DIR)/lib/smtp.c \
-    $(CURL_DIR)/lib/socks.c \
-    $(CURL_DIR)/lib/socks_gssapi.c \
-    $(CURL_DIR)/lib/socks_sspi.c \
-    $(CURL_DIR)/lib/speedcheck.c \
-    $(CURL_DIR)/lib/splay.c \
-    $(CURL_DIR)/lib/ssh-libssh.c \
-    $(CURL_DIR)/lib/ssh.c \
-    $(CURL_DIR)/lib/strcase.c \
-    $(CURL_DIR)/lib/strdup.c \
-    $(CURL_DIR)/lib/strerror.c \
-    $(CURL_DIR)/lib/strtok.c \
-    $(CURL_DIR)/lib/strtoofft.c \
-    $(CURL_DIR)/lib/system_win32.c \
-    $(CURL_DIR)/lib/telnet.c \
-    $(CURL_DIR)/lib/tftp.c \
-    $(CURL_DIR)/lib/timeval.c \
-    $(CURL_DIR)/lib/transfer.c \
-    $(CURL_DIR)/lib/url.c \
-    $(CURL_DIR)/lib/urlapi.c \
-    $(CURL_DIR)/lib/version.c \
-    $(CURL_DIR)/lib/warnless.c \
-    $(CURL_DIR)/lib/wildcard.c \
-    $(CURL_DIR)/lib/x509asn1.c \
-    $(CURL_DIR)/lib/vauth/cleartext.c \
-    $(CURL_DIR)/lib/vauth/cram.c \
-    $(CURL_DIR)/lib/vauth/digest.c \
-    $(CURL_DIR)/lib/vauth/digest_sspi.c \
-    $(CURL_DIR)/lib/vauth/krb5_gssapi.c \
-    $(CURL_DIR)/lib/vauth/krb5_sspi.c \
-    $(CURL_DIR)/lib/vauth/ntlm.c \
-    $(CURL_DIR)/lib/vauth/ntlm_sspi.c \
-    $(CURL_DIR)/lib/vauth/oauth2.c \
-    $(CURL_DIR)/lib/vauth/spnego_gssapi.c \
-    $(CURL_DIR)/lib/vauth/spnego_sspi.c \
-    $(CURL_DIR)/lib/vauth/vauth.c \
-    $(CURL_DIR)/lib/vtls/axtls.c \
-    $(CURL_DIR)/lib/vtls/cyassl.c \
-    $(CURL_DIR)/lib/vtls/darwinssl.c \
-    $(CURL_DIR)/lib/vtls/gskit.c \
-    $(CURL_DIR)/lib/vtls/gtls.c \
-    $(CURL_DIR)/lib/vtls/mbedtls.c \
-    $(CURL_DIR)/lib/vtls/mesalink.c \
-    $(CURL_DIR)/lib/vtls/nss.c \
-    $(CURL_DIR)/lib/vtls/openssl.c \
-    $(CURL_DIR)/lib/vtls/polarssl.c \
-    $(CURL_DIR)/lib/vtls/polarssl_threadlock.c \
-    $(CURL_DIR)/lib/vtls/schannel.c \
-    $(CURL_DIR)/lib/vtls/schannel_verify.c \
-    $(CURL_DIR)/lib/vtls/vtls.c
 
 LPEG_SRC= $(3RD_PARTY)/lpeg-1.0.1/*.c
 GIF_SRC= $(3RD_PARTY)/giflib-5.1.4/lib/*.c
@@ -480,7 +333,7 @@ emscripten:
 	$(EMS_CC) $(SOURCES) $(SYSTEM) $(TIC80_SRC) $(OPT) $(INCLUDES) $(EMS_OPT) -s WASM=0 $(EMS_LINKER_FLAGS) -o build/html/tic.js
 
 wasm:
-	$(EMS_CC) $(SOURCES) $(SYSTEM) $(TIC80_SRC) $(CURL_SRC) $(OPT) $(INCLUDES) $(EMS_OPT) -DHAVE_CONFIG_H -DCURL_NO_OLDIES -s WASM=1 $(EMS_LINKER_FLAGS) -o build/html/tic.js
+	$(EMS_CC) $(SOURCES) $(SYSTEM) $(TIC80_SRC) $(OPT) $(INCLUDES) $(EMS_OPT) -s WASM=1 $(EMS_LINKER_FLAGS) -o build/html/tic.js
 
 mingw: $(STUDIO_DLL) $(SDL_NET) $(FILE_DIALOG) bin/system.o bin/res.o
 	$(CC) bin/system.o bin/res.o $(STUDIO_A) $(SDL_NET) $(FILE_DIALOG) $(OPT) $(INCLUDES) $(MINGW_LINKER_FLAGS) -o $(MINGW_OUTPUT)
