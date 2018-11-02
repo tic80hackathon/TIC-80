@@ -25,6 +25,7 @@
 #include "config.h"
 #include "ext/gif.h"
 #include "ext/file_dialog.h"
+#include "ext/upload_callback.h"
 
 #include <zlib.h>
 #include <ctype.h>
@@ -1480,6 +1481,8 @@ static void onConsoleSurfCommand(Console* console, const char* param)
 
 static void onConsoleUploadCommand(Console* console, const char* param)
 {
+  uploadCallback(5);
+  commandDone(console);
 }
 
 static void onConsoleCodeCommand(Console* console, const char* param)
