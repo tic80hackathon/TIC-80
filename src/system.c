@@ -1560,7 +1560,7 @@ static void onEmscriptenWgetError(const char* error) {}
 
 static void emsStart(s32 argc, char **argv, const char* folder)
 {
-	if(argc == 2)
+	if(argc >= 2)
 	{
 		startVars.argc = argc;
 		startVars.argv = argv;
