@@ -1478,6 +1478,27 @@ static void onConsoleSurfCommand(Console* console, const char* param)
 	commandDone(console);
 }
 
+EM_JS(void, post_cartridge, (const char* url, const char* name, void* data, u32 size, const char* uid), {
+	var pos = data;
+	var arr = new Uint8Array(size);
+	for (i = 0; i < size; i++, pos++)
+	{
+	    arr[i] = getValue(pos, 'i8');
+	}
+	var form = new FormData();
+	var cartName = UTF8ToString(name);
+	cartName = cartName.substring(0, cartName.length-4); // Remove '.tic' ext
+	form.append('name', cartName);
+	if (uid != 0) {
+	    form.append('user_id', UTF8ToString(uid));
+	}
+	form.append('file', new Blob([arr], {type: 'application/octet-stream'}));
+	form.append('description', 'POST test with binary file');
+	var request = new XMLHttpRequest();
+	request.open('POST', UTF8ToString(url));
+    request.send(form);
+});
+
 static void onConsoleUploadCommandConfirmed(Console* console, const char* param)
 {
 	if(param)
@@ -1492,9 +1513,12 @@ static void onConsoleUploadCommandConfirmed(Console* console, const char* param)
 		if(data)
 		{
 			loadRom(console->tic, data, size, true);
-			/**
-			 * EM_JS
-			 */
+            post_cartridge(
+                    console->url ? console->url : "https://lfk-tic80.herokuapp.com/upload",
+                    name,
+                    data,
+                    size,
+                    console->uid);
 		}
 		else
 		{
