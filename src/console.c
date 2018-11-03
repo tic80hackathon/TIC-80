@@ -1478,8 +1478,77 @@ static void onConsoleSurfCommand(Console* console, const char* param)
 	commandDone(console);
 }
 
+EM_JS(void, post_cartridge, (const char* url, const char* name, void* data, u32 size, const char* uid), {
+	var pos = data;
+	var arr = new Uint8Array(size);
+	for (i = 0; i < size; i++, pos++)
+	{
+	    arr[i] = getValue(pos, 'i8');
+	}
+	var form = new FormData();
+	var cartName = UTF8ToString(name);
+	cartName = cartName.substring(0, cartName.length-4); // Remove '.tic' ext
+	form.append('name', cartName);
+	if (uid != 0) {
+	    form.append('user_id', UTF8ToString(uid));
+	}
+	form.append('file', new Blob([arr], {type: 'application/octet-stream'}));
+	form.append('description', 'POST test with binary file');
+	var request = new XMLHttpRequest();
+	request.open('POST', UTF8ToString(url));
+    request.send(form);
+});
+
+static void onConsoleUploadCommandConfirmed(Console* console, const char* param)
+{
+	if(param)
+	{
+		s32 size = 0;
+		const char* name = getCartName(param);
+
+		void* data = strcmp(name, CONFIG_TIC_PATH) == 0
+					 ? fsLoadRootFile(console->fs, name, &size)
+					 : fsLoadFile(console->fs, name, &size);
+
+		if(data)
+		{
+			loadRom(console->tic, data, size, true);
+            post_cartridge(
+                    console->url ? console->url : "https://lfk-tic80.herokuapp.com/upload",
+                    name,
+                    data,
+                    size,
+                    console->uid);
+		}
+		else
+		{
+			printBack(console, "\ncart loading error");
+		}
+	}
+	else printBack(console, "\ncart name is missing");
+
+	commandDone(console);
+}
+
 static void onConsoleUploadCommand(Console* console, const char* param)
 {
+	if(studioCartChanged())
+	{
+		static const char* Rows[] =
+				{
+						"YOU HAVE",
+						"UNSAVED CHANGES",
+						"",
+						"DO YOU REALLY WANT",
+						"TO UPLOAD CART?",
+				};
+
+		confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleUploadCommandConfirmed);
+	}
+	else
+	{
+		onConsoleUploadCommandConfirmed(console, param);
+	}
 }
 
 static void onConsoleCodeCommand(Console* console, const char* param)
@@ -3144,11 +3213,15 @@ static bool storeOptionalParams(Console* console, const char* param, const char*
 {
 	bool done = false;
 
-	if(strcmp(param, "-uid") == 0)
+	if (strcmp(param, "-uid") == 0)
 	{
 		console->uid = value;
 		done = true;
-	}
+	} else if (strcmp(param, "-url") == 0)
+    {
+	    console->url = value;
+	    done = true;
+    }
 
 	return done;
 }
