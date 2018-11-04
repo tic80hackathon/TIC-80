@@ -1565,8 +1565,11 @@ static void emsStart(s32 argc, char **argv, const char* folder)
 		startVars.argc = argc;
 		startVars.argv = argv;
 		startVars.folder = folder;
-
-		emscripten_async_wget(argv[1], DEFAULT_CART, onEmscriptenWget, onEmscriptenWgetError);
+    if ( strcmp(argv[1], "-uiscale") != 0) { //monkey patch
+      emscripten_async_wget(argv[1], DEFAULT_CART, onEmscriptenWget, onEmscriptenWgetError);
+    } else {
+      start(argc, argv, folder);
+    }
 	}
 	else start(argc, argv, folder);
 }
